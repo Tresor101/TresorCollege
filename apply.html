@@ -15,7 +15,7 @@
 
         <div class="application-form">
             <form id="applicationForm" onsubmit="submitApplication(event)">
-                <h2>Personal Information</h2>
+                <h2>Student Information</h2>
                 
                 <div class="form-group">
                     <label for="firstName">First Name:</label>
@@ -23,18 +23,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number:</label>
-                    <input type="tel" id="phone" required>
+                    <label for="surname">Surname:</label>
+                    <input type="text" id="surname" required>
                 </div>
 
                 <div class="form-group">
@@ -43,8 +33,118 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="address">Address:</label>
-                    <textarea id="address" rows="3" required></textarea>
+                    <label for="gender">Gender:</label>
+                    <select id="gender" required>
+                        <option value="">-- Select Gender --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentAddress">Student Address:</label>
+                    <textarea id="studentAddress" rows="3" required></textarea>
+                </div>
+
+                <h2>Guardian 1 Information</h2>
+
+                <div class="form-group">
+                    <label for="guardian1FullName">Full Name:</label>
+                    <input type="text" id="guardian1FullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian1Phone">Phone Number:</label>
+                    <input type="tel" id="guardian1Phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian1Relationship">Relationship to Student:</label>
+                    <select id="guardian1Relationship" required>
+                        <option value="">-- Select Relationship --</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Grandfather">Grandfather</option>
+                        <option value="Grandmother">Grandmother</option>
+                        <option value="Uncle">Uncle</option>
+                        <option value="Aunt">Aunt</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                        <option value="Legal Guardian">Legal Guardian</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian1Address">Address:</label>
+                    <textarea id="guardian1Address" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="sameAsStudent1" onchange="autofillAddress(1)">
+                        Same address as student
+                    </label>
+                </div>
+
+                <h2>Guardian 2 Information</h2>
+
+                <div class="form-group">
+                    <label for="guardian2FullName">Full Name:</label>
+                    <input type="text" id="guardian2FullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian2Phone">Phone Number:</label>
+                    <input type="tel" id="guardian2Phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian2Relationship">Relationship to Student:</label>
+                    <select id="guardian2Relationship" required>
+                        <option value="">-- Select Relationship --</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Grandfather">Grandfather</option>
+                        <option value="Grandmother">Grandmother</option>
+                        <option value="Uncle">Uncle</option>
+                        <option value="Aunt">Aunt</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                        <option value="Legal Guardian">Legal Guardian</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian2Address">Address:</label>
+                    <textarea id="guardian2Address" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="sameAsStudent2" onchange="autofillAddress(2, 'student')">
+                        Same address as student
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="sameAsGuardian1" onchange="autofillAddress(2, 'guardian1')">
+                        Same address as Guardian 1
+                    </label>
+                </div>
+
+                <h2>Contact Information</h2>
+
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Contact Phone:</label>
+                    <input type="tel" id="phone" required>
                 </div>
 
                 <h2>Academic Information</h2>
@@ -58,12 +158,22 @@
                     <label for="grade">Grade Applying For:</label>
                     <select id="grade" required>
                         <option value="">-- Select Grade --</option>
-                        <option value="7">Grade 7</option>
-                        <option value="8">Grade 8</option>
-                        <option value="9">Grade 9</option>
-                        <option value="10">Grade 10</option>
-                        <option value="11">Grade 11</option>
-                        <option value="12">Grade 12</option>
+                        <optgroup label="Primary School">
+                            <option value="1">Grade 1</option>
+                            <option value="2">Grade 2</option>
+                            <option value="3">Grade 3</option>
+                            <option value="4">Grade 4</option>
+                            <option value="5">Grade 5</option>
+                            <option value="6">Grade 6</option>
+                            <option value="7">Grade 7</option>
+                        </optgroup>
+                        <optgroup label="High School">
+                            <option value="8">Grade 8</option>
+                            <option value="9">Grade 9</option>
+                            <option value="10">Grade 10</option>
+                            <option value="11">Grade 11</option>
+                            <option value="12">Grade 12</option>
+                        </optgroup>
                     </select>
                 </div>
 

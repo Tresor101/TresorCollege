@@ -14,6 +14,14 @@
             <p>School Management System</p>
         </header>
 
+        <!-- News Section -->
+        <div class="news-section">
+            <h2>📢 Latest News & Announcements</h2>
+            <div id="newsContainer" class="news-container">
+                <!-- News items will be loaded here -->
+            </div>
+        </div>
+
         <div class="login-section">
             <h2>Select Your Role</h2>
             <div class="role-buttons">
@@ -56,5 +64,11 @@
     </div>
 
     <script src="functions.js"></script>
+    <script>
+        // Load news on page load
+        window.onload = function() {
+            loadNews();
+        };
+    </script>
 </body>
 </html>

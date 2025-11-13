@@ -217,6 +217,166 @@ header p {
     display: none !important;
 }
 
+/* News Section */
+.news-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.news-section h2 {
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.news-container {
+    display: grid;
+    gap: 20px;
+}
+
+.news-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #667eea;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.news-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.news-announcement {
+    border-left-color: #667eea;
+}
+
+.news-event {
+    border-left-color: #28a745;
+}
+
+.news-achievement {
+    border-left-color: #ffc107;
+}
+
+.news-alert {
+    border-left-color: #dc3545;
+    background: #fff5f5;
+}
+
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 15px;
+}
+
+.news-header h3 {
+    color: #333;
+    font-size: 1.2em;
+    margin: 0;
+    flex: 1;
+}
+
+.news-date {
+    color: #666;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.news-content {
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.no-news {
+    text-align: center;
+    color: #999;
+    padding: 30px;
+    font-style: italic;
+}
+
+.news-form {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.news-form h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.current-news {
+    margin-top: 30px;
+}
+
+.current-news h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#adminNewsContainer {
+    display: grid;
+    gap: 15px;
+}
+
+#adminNewsContainer .news-card {
+    position: relative;
+}
+
+#adminNewsContainer .news-card .btn-delete {
+    margin-top: 15px;
+}
+
+/* Teacher Form Styling */
+.teacher-form {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.teacher-form h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.teachers-list {
+    margin-top: 30px;
+}
+
+.teachers-list h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.checkbox-grid label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.checkbox-grid input[type="checkbox"] {
+    width: auto;
+    cursor: pointer;
+}
+
 /* Dashboard */
 .dashboard {
     background: white;
@@ -491,6 +651,26 @@ table tbody tr:hover {
     margin-bottom: 15px;
 }
 
+/* Checkbox Group Styling */
+.checkbox-group {
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+    cursor: pointer;
+    color: #666;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     body {
@@ -507,6 +687,31 @@ table tbody tr:hover {
 
     header p {
         font-size: 1em;
+    }
+
+    .news-section {
+        padding: 20px 15px;
+    }
+
+    .news-section h2 {
+        font-size: 1.3em;
+    }
+
+    .news-card {
+        padding: 15px;
+    }
+
+    .news-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .news-header h3 {
+        font-size: 1.1em;
+    }
+
+    .news-date {
+        font-size: 0.85em;
     }
 
     .role-buttons {
@@ -610,6 +815,14 @@ table tbody tr:hover {
         font-size: 2.2em;
     }
 
+    .news-section {
+        padding: 25px;
+    }
+
+    .news-card {
+        padding: 18px;
+    }
+
     .role-buttons {
         gap: 25px;
     }
@@ -674,6 +887,27 @@ table tbody tr:hover {
 
     header p {
         font-size: 1.3em;
+    }
+
+    .news-section {
+        padding: 40px;
+    }
+
+    .news-section h2 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    .news-card {
+        padding: 25px;
+    }
+
+    .news-header h3 {
+        font-size: 1.4em;
+    }
+
+    .news-content {
+        font-size: 1.1em;
     }
 
     .role-btn {
@@ -753,6 +987,32 @@ table tbody tr:hover {
 
     header p {
         font-size: 1.6em;
+    }
+
+    .news-section {
+        padding: 50px;
+    }
+
+    .news-section h2 {
+        font-size: 2.5em;
+        margin-bottom: 40px;
+    }
+
+    .news-card {
+        padding: 30px;
+    }
+
+    .news-header h3 {
+        font-size: 1.6em;
+    }
+
+    .news-content {
+        font-size: 1.3em;
+        line-height: 1.8;
+    }
+
+    .news-date {
+        font-size: 1.1em;
     }
 
     .role-btn {
@@ -867,6 +1127,27 @@ table tbody tr:hover {
 
     header p {
         font-size: 0.95em;
+    }
+
+    .news-section {
+        padding: 15px;
+    }
+
+    .news-section h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    .news-card {
+        padding: 12px;
+    }
+
+    .news-header h3 {
+        font-size: 1em;
+    }
+
+    .news-content {
+        font-size: 0.9em;
     }
 
     .role-buttons {
