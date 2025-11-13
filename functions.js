@@ -2,6 +2,71 @@
 let currentRole = null;
 let currentApplicationId = null;
 
+// Primary School Subjects by Grade
+const primarySchoolSubjects = {
+    1: [
+        { name: 'Mathematics', maxMarks: 100 },
+        { name: 'English', maxMarks: 100 },
+        { name: 'Science', maxMarks: 50 },
+        { name: 'Social Studies', maxMarks: 50 },
+        { name: 'Art', maxMarks: 25 }
+    ],
+    2: [
+        { name: 'Mathematics', maxMarks: 100 },
+        { name: 'English', maxMarks: 100 },
+        { name: 'Science', maxMarks: 50 },
+        { name: 'Social Studies', maxMarks: 50 },
+        { name: 'Art', maxMarks: 25 },
+        { name: 'Physical Education', maxMarks: 25 }
+    ],
+    3: [
+        { name: 'Mathematics', maxMarks: 100 },
+        { name: 'English', maxMarks: 100 },
+        { name: 'Science', maxMarks: 75 },
+        { name: 'Social Studies', maxMarks: 75 },
+        { name: 'Art', maxMarks: 25 },
+        { name: 'Physical Education', maxMarks: 25 }
+    ],
+    4: [
+        { name: 'Mathematics', maxMarks: 100 },
+        { name: 'English', maxMarks: 100 },
+        { name: 'Science', maxMarks: 75 },
+        { name: 'Social Studies', maxMarks: 75 },
+        { name: 'Art', maxMarks: 25 },
+        { name: 'Physical Education', maxMarks: 25 },
+        { name: 'Computer Studies', maxMarks: 50 }
+    ],
+    5: [
+        { name: 'Mathematics', maxMarks: 100 },
+        { name: 'English', maxMarks: 100 },
+        { name: 'Science', maxMarks: 100 },
+        { name: 'Social Studies', maxMarks: 100 },
+        { name: 'Art', maxMarks: 25 },
+        { name: 'Physical Education', maxMarks: 25 },
+        { name: 'Computer Studies', maxMarks: 50 }
+    ],
+    6: [
+        { name: 'Mathematics', maxMarks: 100 },
+        { name: 'English', maxMarks: 100 },
+        { name: 'Science', maxMarks: 100 },
+        { name: 'Social Studies', maxMarks: 100 },
+        { name: 'Art', maxMarks: 25 },
+        { name: 'Physical Education', maxMarks: 25 },
+        { name: 'Computer Studies', maxMarks: 50 },
+        { name: 'French', maxMarks: 50 }
+    ],
+    7: [
+        { name: 'Mathematics', maxMarks: 100 },
+        { name: 'English', maxMarks: 100 },
+        { name: 'Science', maxMarks: 100 },
+        { name: 'Social Studies', maxMarks: 100 },
+        { name: 'Art', maxMarks: 25 },
+        { name: 'Physical Education', maxMarks: 25 },
+        { name: 'Computer Studies', maxMarks: 50 },
+        { name: 'French', maxMarks: 50 }
+    ]
+};
+
 // Initialize data if not exists
 function initializeData() {
     if (!localStorage.getItem('applications')) {
@@ -314,27 +379,31 @@ function loadStudentData() {
     const marksBody = document.getElementById('marksBody');
     if (isRegistered && marks[userData.studentId]) {
         const studentMarks = marks[userData.studentId];
-        let total = 0;
+        let totalPercentage = 0;
         
         marksBody.innerHTML = '';
         studentMarks.forEach(mark => {
+            const maxMarks = mark.maxMarks || 100;
+            const percentage = ((mark.marks / maxMarks) * 100).toFixed(1);
+            const gradeValue = calculateGrade(percentage);
+            totalPercentage += parseFloat(percentage);
+            
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${mark.subject}</td>
                 <td>${mark.marks}</td>
-                <td>${calculateGrade(mark.marks)}</td>
+                <td>${maxMarks}</td>
+                <td>${percentage}%</td>
+                <td>${gradeValue}</td>
             `;
             marksBody.appendChild(row);
-            total += mark.marks;
         });
         
-        document.getElementById('totalMarks').textContent = total;
-        document.getElementById('averageMarks').textContent = 
-            studentMarks.length > 0 ? (total / studentMarks.length).toFixed(2) : '0';
+        const average = (totalPercentage / studentMarks.length).toFixed(1);
+        document.getElementById('averageMarks').textContent = average + '%';
     } else {
-        marksBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">No marks available yet</td></tr>';
-        document.getElementById('totalMarks').textContent = '0';
-        document.getElementById('averageMarks').textContent = '0';
+        marksBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No marks available yet</td></tr>';
+        document.getElementById('averageMarks').textContent = 'N/A';
     }
 }
 
@@ -694,6 +763,7 @@ function loadStudentOptions() {
 
 function loadStudentMarks() {
     const studentId = document.getElementById('studentSelect').value;
+    const subjectSelect = document.getElementById('subject');
     
     if (!studentId) {
         document.getElementById('marksFormSection').classList.add('hidden');
@@ -702,6 +772,49 @@ function loadStudentMarks() {
     
     document.getElementById('marksFormSection').classList.remove('hidden');
     
+    // Get student's grade to load appropriate subjects
+    const students = JSON.parse(localStorage.getItem('students'));
+    const student = students.find(s => s.id === studentId);
+    
+    if (!student) return;
+    
+    const grade = parseInt(student.grade);
+    
+    // Populate subject dropdown based on grade
+    subjectSelect.innerHTML = '<option value="">-- Select Subject --</option>';
+    
+    if (grade >= 1 && grade <= 7) {
+        // Primary school - use predefined subjects
+        const subjects = primarySchoolSubjects[grade] || [];
+        subjects.forEach(subject => {
+            const option = document.createElement('option');
+            option.value = subject.name;
+            option.textContent = `${subject.name} (Max: ${subject.maxMarks})`;
+            option.dataset.maxMarks = subject.maxMarks;
+            subjectSelect.appendChild(option);
+        });
+    } else {
+        // High school - allow custom subjects with 100 max marks
+        const marks = JSON.parse(localStorage.getItem('marks'));
+        const studentMarks = marks[studentId] || [];
+        const uniqueSubjects = [...new Set(studentMarks.map(m => m.subject))];
+        
+        uniqueSubjects.forEach(subj => {
+            const option = document.createElement('option');
+            option.value = subj;
+            option.textContent = `${subj} (Max: 100)`;
+            option.dataset.maxMarks = 100;
+            subjectSelect.appendChild(option);
+        });
+        
+        // Add custom subject option
+        const customOption = document.createElement('option');
+        customOption.value = 'custom';
+        customOption.textContent = '+ Add New Subject';
+        customOption.dataset.maxMarks = 100;
+        subjectSelect.appendChild(customOption);
+    }
+    
     const marks = JSON.parse(localStorage.getItem('marks'));
     const studentMarks = marks[studentId] || [];
     
@@ -709,16 +822,22 @@ function loadStudentMarks() {
     tbody.innerHTML = '';
     
     if (studentMarks.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No marks added yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No marks added yet</td></tr>';
         return;
     }
     
     studentMarks.forEach((mark, index) => {
+        const maxMarks = mark.maxMarks || 100;
+        const percentage = ((mark.marks / maxMarks) * 100).toFixed(1);
+        const gradeValue = calculateGrade(percentage);
+        
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${mark.subject}</td>
             <td>${mark.marks}</td>
-            <td>${calculateGrade(mark.marks)}</td>
+            <td>${maxMarks}</td>
+            <td>${percentage}%</td>
+            <td>${gradeValue}</td>
             <td>
                 <button class="action-btn btn-delete" onclick="deleteMark('${studentId}', ${index})">Delete</button>
             </td>
@@ -727,12 +846,53 @@ function loadStudentMarks() {
     });
 }
 
+// Update max marks info when subject changes
+function updateMaxMarks() {
+    const subjectSelect = document.getElementById('subject');
+    const marksInput = document.getElementById('marks');
+    const maxMarksInfo = document.getElementById('maxMarksInfo');
+    
+    const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
+    if (selectedOption && selectedOption.dataset.maxMarks) {
+        const maxMarks = selectedOption.dataset.maxMarks;
+        marksInput.max = maxMarks;
+        maxMarksInfo.textContent = `Maximum marks: ${maxMarks}`;
+    } else {
+        marksInput.max = 100;
+        maxMarksInfo.textContent = '';
+    }
+}
+
 function saveMarks(event) {
     event.preventDefault();
     
     const studentId = document.getElementById('studentSelect').value;
-    const subject = document.getElementById('subject').value;
+    const subjectSelect = document.getElementById('subject');
+    let subject = subjectSelect.value;
     const marksValue = parseInt(document.getElementById('marks').value);
+    
+    if (!subject) {
+        alert('Please select a subject');
+        return;
+    }
+    
+    // Handle custom subject for high school
+    if (subject === 'custom') {
+        subject = prompt('Enter the subject name:');
+        if (!subject || subject.trim() === '') {
+            alert('Subject name is required');
+            return;
+        }
+        subject = subject.trim();
+    }
+    
+    const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
+    const maxMarks = parseInt(selectedOption.dataset.maxMarks) || 100;
+    
+    if (marksValue > maxMarks) {
+        alert(`Marks cannot exceed ${maxMarks} for this subject`);
+        return;
+    }
     
     const marks = JSON.parse(localStorage.getItem('marks'));
     
@@ -740,18 +900,33 @@ function saveMarks(event) {
         marks[studentId] = [];
     }
     
-    marks[studentId].push({
-        subject,
-        marks: marksValue
-    });
+    // Check if subject already has marks
+    const existingIndex = marks[studentId].findIndex(m => m.subject === subject);
+    if (existingIndex !== -1) {
+        if (!confirm(`${subject} already has marks. Do you want to replace them?`)) {
+            return;
+        }
+        marks[studentId][existingIndex] = {
+            subject,
+            marks: marksValue,
+            maxMarks
+        };
+    } else {
+        marks[studentId].push({
+            subject,
+            marks: marksValue,
+            maxMarks
+        });
+    }
     
     localStorage.setItem('marks', JSON.stringify(marks));
     
     document.getElementById('subject').value = '';
     document.getElementById('marks').value = '';
+    document.getElementById('maxMarksInfo').textContent = '';
     
     loadStudentMarks();
-    alert('Marks added successfully!');
+    alert('Marks saved successfully!');
 }
 
 function deleteMark(studentId, index) {
