@@ -101,6 +101,23 @@ function initializeData() {
     if (!localStorage.getItem('teachers')) {
         localStorage.setItem('teachers', JSON.stringify([]));
     }
+    
+    // Initialize fees for existing students if not present
+    const students = JSON.parse(localStorage.getItem('students') || '[]');
+    let updated = false;
+    students.forEach(student => {
+        if (student.fees === undefined) {
+            student.fees = {
+                totalFees: 0,
+                amountPaid: 0,
+                balanceDue: 0
+            };
+            updated = true;
+        }
+    });
+    if (updated) {
+        localStorage.setItem('students', JSON.stringify(students));
+    }
 }
 
 // Home Page Functions
@@ -443,6 +460,9 @@ function generateStudentCard() {
     // Get initials for photo placeholder
     const initials = student.firstName.charAt(0) + student.surname.charAt(0);
     
+    // Get fee information
+    const fees = student.fees || { totalFees: 0, amountPaid: 0, balanceDue: 0 };
+    
     // Populate card
     document.getElementById('cardInitials').textContent = initials.toUpperCase();
     document.getElementById('cardStudentId').textContent = student.id;
@@ -450,6 +470,11 @@ function generateStudentCard() {
     document.getElementById('cardGrade').textContent = `Grade ${student.grade}`;
     document.getElementById('cardTeacher').textContent = classTeacher;
     document.getElementById('cardYear').textContent = new Date().getFullYear() + ' - ' + (new Date().getFullYear() + 1);
+    
+    // Populate fee information
+    document.getElementById('cardTotalFees').textContent = '$' + fees.totalFees.toFixed(2);
+    document.getElementById('cardAmountPaid').textContent = '$' + fees.amountPaid.toFixed(2);
+    document.getElementById('cardBalanceDue').textContent = '$' + fees.balanceDue.toFixed(2);
     
     // Show modal
     document.getElementById('studentCardModal').classList.remove('hidden');
@@ -537,6 +562,122 @@ function printReport() {
     window.print();
 }
 
+// Fee Management Functions
+function loadStudentFees() {
+    const studentId = document.getElementById('feeStudentSelect').value;
+    const feesFormSection = document.getElementById('feesFormSection');
+    
+    if (!studentId) {
+        feesFormSection.classList.add('hidden');
+        return;
+    }
+    
+    feesFormSection.classList.remove('hidden');
+    
+    const students = JSON.parse(localStorage.getItem('students'));
+    const student = students.find(s => s.studentId === studentId);
+    
+    if (!student) return;
+    
+    const fees = student.fees || { totalFees: 0, amountPaid: 0, balanceDue: 0 };
+    
+    document.getElementById('totalFees').value = fees.totalFees;
+    document.getElementById('amountPaid').value = fees.amountPaid;
+    document.getElementById('balanceDue').value = '$' + fees.balanceDue.toFixed(2);
+    
+    document.getElementById('displayTotalFees').textContent = '$' + fees.totalFees.toFixed(2);
+    document.getElementById('displayAmountPaid').textContent = '$' + fees.amountPaid.toFixed(2);
+    document.getElementById('displayBalanceDue').textContent = '$' + fees.balanceDue.toFixed(2);
+    
+    // Auto-calculate balance when amounts change
+    document.getElementById('totalFees').oninput = calculateBalance;
+    document.getElementById('amountPaid').oninput = calculateBalance;
+}
+
+function calculateBalance() {
+    const total = parseFloat(document.getElementById('totalFees').value) || 0;
+    const paid = parseFloat(document.getElementById('amountPaid').value) || 0;
+    const balance = total - paid;
+    document.getElementById('balanceDue').value = '$' + balance.toFixed(2);
+}
+
+function saveFees(event) {
+    event.preventDefault();
+    
+    const studentId = document.getElementById('feeStudentSelect').value;
+    const totalFees = parseFloat(document.getElementById('totalFees').value);
+    const amountPaid = parseFloat(document.getElementById('amountPaid').value);
+    const balanceDue = totalFees - amountPaid;
+    
+    if (amountPaid > totalFees) {
+        alert('Amount paid cannot exceed total fees');
+        return;
+    }
+    
+    const students = JSON.parse(localStorage.getItem('students'));
+    const studentIndex = students.findIndex(s => s.studentId === studentId);
+    
+    if (studentIndex === -1) return;
+    
+    students[studentIndex].fees = {
+        totalFees,
+        amountPaid,
+        balanceDue
+    };
+    
+    localStorage.setItem('students', JSON.stringify(students));
+    
+    document.getElementById('displayTotalFees').textContent = '$' + totalFees.toFixed(2);
+    document.getElementById('displayAmountPaid').textContent = '$' + amountPaid.toFixed(2);
+    document.getElementById('displayBalanceDue').textContent = '$' + balanceDue.toFixed(2);
+    
+    loadRegisteredStudents(); // Refresh student table
+    alert('Fee information updated successfully!');
+}
+
+function printStudentCardAdmin() {
+    const studentId = document.getElementById('feeStudentSelect').value;
+    
+    if (!studentId) {
+        alert('Please select a student first');
+        return;
+    }
+    
+    const students = JSON.parse(localStorage.getItem('students'));
+    const student = students.find(s => s.studentId === studentId);
+    
+    if (!student) {
+        alert('Student not found');
+        return;
+    }
+    
+    // Generate the card using the same function
+    // But we need to set sessionStorage temporarily for the function to work
+    const originalStudentId = sessionStorage.getItem('studentId');
+    sessionStorage.setItem('studentId', studentId);
+    
+    generateStudentCard();
+    
+    // Add print button dynamically
+    setTimeout(() => {
+        const modalActions = document.querySelector('#studentCardModal .modal-actions');
+        if (modalActions && !modalActions.querySelector('.admin-print-btn')) {
+            const printBtn = document.createElement('button');
+            printBtn.className = 'btn-primary admin-print-btn';
+            printBtn.textContent = 'Print Card';
+            printBtn.onclick = () => window.print();
+            modalActions.insertBefore(printBtn, modalActions.firstChild);
+        }
+    }, 100);
+    
+    // Restore original studentId
+    if (originalStudentId) {
+        sessionStorage.setItem('studentId', originalStudentId);
+    } else {
+        sessionStorage.removeItem('studentId');
+    }
+}
+
 // Admin Dashboard Functions
 function loadApplications() {
     const applications = JSON.parse(localStorage.getItem('applications'));
@@ -572,11 +713,14 @@ function loadRegisteredStudents() {
     tbody.innerHTML = '';
     
     if (students.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No registered students</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No registered students</td></tr>';
         return;
     }
     
     students.forEach(student => {
+        const fees = student.fees || { totalFees: 0, amountPaid: 0, balanceDue: 0 };
+        const balanceColor = fees.balanceDue > 0 ? '#e74c3c' : '#27ae60';
+        
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${student.studentId}</td>
@@ -585,6 +729,7 @@ function loadRegisteredStudents() {
             <td>${student.email}</td>
             <td>${student.phone}</td>
             <td>${student.registrationDate}</td>
+            <td style="color: ${balanceColor}; font-weight: bold;">$${fees.balanceDue.toFixed(2)}</td>
             <td>
                 <button class="action-btn btn-view" onclick="editStudent('${student.studentId}')">Edit</button>
                 <button class="action-btn btn-delete" onclick="deleteStudent('${student.studentId}')">Delete</button>
@@ -869,17 +1014,27 @@ function deleteStudent(studentId) {
 function loadStudentOptions() {
     const students = JSON.parse(localStorage.getItem('students'));
     const select = document.getElementById('studentSelect');
+    const feeSelect = document.getElementById('feeStudentSelect');
     
-    if (!select) return;
+    if (select) {
+        select.innerHTML = '<option value="">-- Select Student --</option>';
+        students.forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.studentId;
+            option.textContent = `${student.studentId} - ${student.fullName}`;
+            select.appendChild(option);
+        });
+    }
     
-    select.innerHTML = '<option value="">-- Select Student --</option>';
-    
-    students.forEach(student => {
-        const option = document.createElement('option');
-        option.value = student.studentId;
-        option.textContent = `${student.studentId} - ${student.fullName}`;
-        select.appendChild(option);
-    });
+    if (feeSelect) {
+        feeSelect.innerHTML = '<option value="">-- Select Student --</option>';
+        students.forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.studentId;
+            option.textContent = `${student.studentId} - ${student.fullName}`;
+            feeSelect.appendChild(option);
+        });
+    }
 }
 
 function loadStudentMarks() {

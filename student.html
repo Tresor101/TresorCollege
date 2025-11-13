@@ -41,8 +41,8 @@
                 </div>
                 
                 <div class="action-buttons" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn-primary" onclick="generateStudentCard()">Generate Student Card</button>
-                    <button class="btn-primary" onclick="generateReport()">Generate Report</button>
+                    <button class="btn-primary" onclick="generateStudentCard()">View Student Card</button>
+                    <button class="btn-primary" onclick="generateReport()">View Report</button>
                 </div>
             </div>
 
@@ -120,10 +120,26 @@
                     <div class="card-footer">
                         <p>This card is property of Tresor College and must be carried at all times</p>
                     </div>
+                    <div class="fee-section">
+                        <h3>School Fees Status</h3>
+                        <div class="fee-details">
+                            <div class="fee-row">
+                                <span class="fee-label">Total Fees:</span>
+                                <span class="fee-value" id="cardTotalFees"></span>
+                            </div>
+                            <div class="fee-row">
+                                <span class="fee-label">Amount Paid:</span>
+                                <span class="fee-value fee-paid" id="cardAmountPaid"></span>
+                            </div>
+                            <div class="fee-row">
+                                <span class="fee-label">Balance Due:</span>
+                                <span class="fee-value fee-balance" id="cardBalanceDue"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-actions" style="margin-top: 20px;">
-                <button class="btn-primary" onclick="printStudentCard()">Print Card</button>
                 <button class="btn-secondary" onclick="closeStudentCard()">Close</button>
             </div>
         </div>

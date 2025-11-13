@@ -22,6 +22,7 @@
                 <button class="tab-btn" onclick="showTab('students')">Registered Students</button>
                 <button class="tab-btn" onclick="showTab('teachers')">Teachers</button>
                 <button class="tab-btn" onclick="showTab('marks')">Manage Marks</button>
+                <button class="tab-btn" onclick="showTab('fees')">School Fees</button>
                 <button class="tab-btn" onclick="showTab('news')">Manage News</button>
             </div>
 
@@ -60,6 +61,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Registration Date</th>
+                                <th>Fees Balance</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -250,6 +252,96 @@
                                     <!-- Current marks will be loaded here -->
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fees Tab -->
+            <div id="feesTab" class="tab-content">
+                <h2>Manage School Fees</h2>
+                <div class="fees-management">
+                    <div class="form-group">
+                        <label for="feeStudentSelect">Select Student:</label>
+                        <select id="feeStudentSelect" onchange="loadStudentFees()">
+                            <option value="">-- Select Student --</option>
+                        </select>
+                    </div>
+                    
+                    <div id="feesFormSection" class="hidden">
+                        <h3>Update Fee Information</h3>
+                        <form id="feesForm" onsubmit="saveFees(event)">
+                            <div class="form-group">
+                                <label for="totalFees">Total Fees ($):</label>
+                                <input type="number" id="totalFees" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="amountPaid">Amount Paid ($):</label>
+                                <input type="number" id="amountPaid" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Balance Due:</label>
+                                <input type="text" id="balanceDue" readonly style="background: #f0f0f0;">
+                            </div>
+                            <button type="submit" class="btn-primary">Update Fees</button>
+                        </form>
+                        
+                        <div class="fee-history" style="margin-top: 30px;">
+                            <h3>Current Fee Status</h3>
+                            <div id="feeStatusDisplay" class="info-section">
+                                <p><strong>Total Fees:</strong> <span id="displayTotalFees">$0.00</span></p>
+                                <p><strong>Amount Paid:</strong> <span id="displayAmountPaid">$0.00</span></p>
+                                <p><strong>Balance Due:</strong> <span id="displayBalanceDue" style="color: #e74c3c; font-weight: bold;">$0.00</span></p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <button class="btn-primary" onclick="printStudentCardAdmin()">Print Student Card</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fees Tab -->
+            <div id="feesTab" class="tab-content">
+                <h2>Manage School Fees</h2>
+                <div class="fees-management">
+                    <div class="form-group">
+                        <label for="feeStudentSelect">Select Student:</label>
+                        <select id="feeStudentSelect" onchange="loadStudentFees()">
+                            <option value="">-- Select Student --</option>
+                        </select>
+                    </div>
+                    
+                    <div id="feesFormSection" class="hidden">
+                        <h3>Update Fee Information</h3>
+                        <form id="feesForm" onsubmit="saveFees(event)">
+                            <div class="form-group">
+                                <label for="totalFees">Total Fees ($):</label>
+                                <input type="number" id="totalFees" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="amountPaid">Amount Paid ($):</label>
+                                <input type="number" id="amountPaid" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Balance Due:</label>
+                                <input type="text" id="balanceDue" readonly style="background: #f0f0f0;">
+                            </div>
+                            <button type="submit" class="btn-primary">Update Fees</button>
+                        </form>
+                        
+                        <div class="fee-history" style="margin-top: 30px;">
+                            <h3>Current Fee Status</h3>
+                            <div id="feeStatusDisplay" class="info-section">
+                                <p><strong>Total Fees:</strong> <span id="displayTotalFees">$0.00</span></p>
+                                <p><strong>Amount Paid:</strong> <span id="displayAmountPaid">$0.00</span></p>
+                                <p><strong>Balance Due:</strong> <span id="displayBalanceDue" style="color: #e74c3c; font-weight: bold;">$0.00</span></p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <button class="btn-primary" onclick="printStudentCardAdmin()">Print Student Card</button>
                         </div>
                     </div>
                 </div>
