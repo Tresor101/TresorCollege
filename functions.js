@@ -416,6 +416,133 @@ function calculateGrade(marks) {
     return 'F';
 }
 
+// Student Card and Report Functions
+function generateStudentCard() {
+    const studentId = sessionStorage.getItem('studentId');
+    const students = JSON.parse(localStorage.getItem('students'));
+    const student = students.find(s => s.id === studentId);
+    
+    if (!student) {
+        alert('Student information not found');
+        return;
+    }
+    
+    // Get class teacher
+    const teachers = JSON.parse(localStorage.getItem('teachers'));
+    const grade = parseInt(student.grade);
+    let classTeacher = 'Not Assigned';
+    
+    if (grade >= 1 && grade <= 7) {
+        // Primary school - find teacher assigned to this grade
+        const teacher = teachers.find(t => t.isPrimaryTeacher && parseInt(t.assignedClass) === grade);
+        if (teacher) classTeacher = teacher.fullName;
+    } else if (grade >= 8 && grade <= 12) {
+        // High school - find main class teacher
+        const teacher = teachers.find(t => t.isHighSchoolTeacher && parseInt(t.mainClass) === grade);
+        if (teacher) classTeacher = teacher.fullName;
+    }
+    
+    // Get initials for photo placeholder
+    const initials = student.firstName.charAt(0) + student.surname.charAt(0);
+    
+    // Populate card
+    document.getElementById('cardInitials').textContent = initials.toUpperCase();
+    document.getElementById('cardStudentId').textContent = student.id;
+    document.getElementById('cardStudentName').textContent = student.fullName;
+    document.getElementById('cardGrade').textContent = `Grade ${student.grade}`;
+    document.getElementById('cardTeacher').textContent = classTeacher;
+    document.getElementById('cardYear').textContent = new Date().getFullYear() + ' - ' + (new Date().getFullYear() + 1);
+    
+    // Show modal
+    document.getElementById('studentCardModal').classList.remove('hidden');
+}
+
+function closeStudentCard() {
+    document.getElementById('studentCardModal').classList.add('hidden');
+}
+
+function printStudentCard() {
+    window.print();
+}
+
+function generateReport() {
+    const studentId = sessionStorage.getItem('studentId');
+    const students = JSON.parse(localStorage.getItem('students'));
+    const student = students.find(s => s.id === studentId);
+    const marks = JSON.parse(localStorage.getItem('marks'));
+    const studentMarks = marks[studentId] || [];
+    
+    if (!student) {
+        alert('Student information not found');
+        return;
+    }
+    
+    if (studentMarks.length === 0) {
+        alert('No marks available to generate report');
+        return;
+    }
+    
+    // Get class teacher
+    const teachers = JSON.parse(localStorage.getItem('teachers'));
+    const grade = parseInt(student.grade);
+    let classTeacher = 'Not Assigned';
+    
+    if (grade >= 1 && grade <= 7) {
+        const teacher = teachers.find(t => t.isPrimaryTeacher && parseInt(t.assignedClass) === grade);
+        if (teacher) classTeacher = teacher.fullName;
+    } else if (grade >= 8 && grade <= 12) {
+        const teacher = teachers.find(t => t.isHighSchoolTeacher && parseInt(t.mainClass) === grade);
+        if (teacher) classTeacher = teacher.fullName;
+    }
+    
+    // Populate report header
+    document.getElementById('reportDate').textContent = 'Report Generated: ' + new Date().toLocaleDateString();
+    document.getElementById('reportStudentId').textContent = student.id;
+    document.getElementById('reportStudentName').textContent = student.fullName;
+    document.getElementById('reportGrade').textContent = `Grade ${student.grade}`;
+    document.getElementById('reportTeacher').textContent = classTeacher;
+    
+    // Populate marks table
+    const tbody = document.getElementById('reportMarksBody');
+    tbody.innerHTML = '';
+    
+    let totalPercentage = 0;
+    
+    studentMarks.forEach(mark => {
+        const maxMarks = mark.maxMarks || 100;
+        const percentage = ((mark.marks / maxMarks) * 100).toFixed(1);
+        const gradeValue = calculateGrade(percentage);
+        totalPercentage += parseFloat(percentage);
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${mark.subject}</td>
+            <td>${mark.marks}</td>
+            <td>${maxMarks}</td>
+            <td>${percentage}%</td>
+            <td>${gradeValue}</td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    const average = (totalPercentage / studentMarks.length).toFixed(1);
+    const overallGrade = calculateGrade(average);
+    
+    document.getElementById('reportAverage').textContent = average + '%';
+    document.getElementById('reportOverallGrade').textContent = overallGrade;
+    
+    // Show modal
+    document.getElementById('reportModal').classList.remove('hidden');
+}
+
+function closeReport() {
+    document.getElementById('reportModal').classList.add('hidden');
+}
+
+function printReport() {
+    window.print();
+}
+
 // Admin Dashboard Functions
 function loadApplications() {
     const applications = JSON.parse(localStorage.getItem('applications'));
