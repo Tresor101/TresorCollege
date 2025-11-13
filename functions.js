@@ -385,7 +385,6 @@ function loadStudentData() {
         studentMarks.forEach(mark => {
             const maxMarks = mark.maxMarks || 100;
             const percentage = ((mark.marks / maxMarks) * 100).toFixed(1);
-            const gradeValue = calculateGrade(percentage);
             totalPercentage += parseFloat(percentage);
             
             const row = document.createElement('tr');
@@ -394,7 +393,6 @@ function loadStudentData() {
                 <td>${mark.marks}</td>
                 <td>${maxMarks}</td>
                 <td>${percentage}%</td>
-                <td>${gradeValue}</td>
             `;
             marksBody.appendChild(row);
         });
@@ -402,7 +400,7 @@ function loadStudentData() {
         const average = (totalPercentage / studentMarks.length).toFixed(1);
         document.getElementById('averageMarks').textContent = average + '%';
     } else {
-        marksBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No marks available yet</td></tr>';
+        marksBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No marks available yet</td></tr>';
         document.getElementById('averageMarks').textContent = 'N/A';
     }
 }
@@ -511,7 +509,6 @@ function generateReport() {
     studentMarks.forEach(mark => {
         const maxMarks = mark.maxMarks || 100;
         const percentage = ((mark.marks / maxMarks) * 100).toFixed(1);
-        const gradeValue = calculateGrade(percentage);
         totalPercentage += parseFloat(percentage);
         
         const row = document.createElement('tr');
@@ -520,16 +517,13 @@ function generateReport() {
             <td>${mark.marks}</td>
             <td>${maxMarks}</td>
             <td>${percentage}%</td>
-            <td>${gradeValue}</td>
         `;
         tbody.appendChild(row);
     });
     
     const average = (totalPercentage / studentMarks.length).toFixed(1);
-    const overallGrade = calculateGrade(average);
     
     document.getElementById('reportAverage').textContent = average + '%';
-    document.getElementById('reportOverallGrade').textContent = overallGrade;
     
     // Show modal
     document.getElementById('reportModal').classList.remove('hidden');
@@ -949,14 +943,13 @@ function loadStudentMarks() {
     tbody.innerHTML = '';
     
     if (studentMarks.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No marks added yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No marks added yet</td></tr>';
         return;
     }
     
     studentMarks.forEach((mark, index) => {
         const maxMarks = mark.maxMarks || 100;
         const percentage = ((mark.marks / maxMarks) * 100).toFixed(1);
-        const gradeValue = calculateGrade(percentage);
         
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -964,7 +957,6 @@ function loadStudentMarks() {
             <td>${mark.marks}</td>
             <td>${maxMarks}</td>
             <td>${percentage}%</td>
-            <td>${gradeValue}</td>
             <td>
                 <button class="action-btn btn-delete" onclick="deleteMark('${studentId}', ${index})">Delete</button>
             </td>
