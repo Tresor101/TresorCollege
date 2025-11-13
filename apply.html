@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Application</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Application Form</h1>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </header>
+
+        <div class="application-form">
+            <form id="applicationForm" onsubmit="submitApplication(event)">
+                <h2>Personal Information</h2>
+                
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <textarea id="address" rows="3" required></textarea>
+                </div>
+
+                <h2>Academic Information</h2>
+
+                <div class="form-group">
+                    <label for="previousSchool">Previous School:</label>
+                    <input type="text" id="previousSchool" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="grade">Grade Applying For:</label>
+                    <select id="grade" required>
+                        <option value="">-- Select Grade --</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Submit Application</button>
+                    <button type="reset" class="btn-secondary">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="successMessage" class="success-message hidden">
+            <h2>✓ Application Submitted Successfully!</h2>
+            <p>Your application has been received. Please save your Application ID to check your status.</p>
+            <p class="highlight-box"><strong>Your Application ID:</strong> <span id="submittedApplicationId" class="app-id"></span></p>
+            <p class="info-text">Use this Application ID to log in and check your application status.</p>
+            <a href="index.html" class="btn-primary">Go to Login</a>
+        </div>
+    </div>
+
+    <script src="functions.js"></script>
+</body>
+</html>

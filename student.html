@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Dashboard</h1>
+            <div class="user-info">
+                <span id="studentName">Welcome, Student</span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="card">
+                <h2>My Information</h2>
+                <div id="studentInfo" class="info-section">
+                    <p><strong>Student ID:</strong> <span id="studentId"></span></p>
+                    <p><strong>Name:</strong> <span id="fullName"></span></p>
+                    <p><strong>Email:</strong> <span id="email"></span></p>
+                    <p><strong>Phone:</strong> <span id="phone"></span></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Application Status</h2>
+                <div id="applicationStatus" class="status-section">
+                    <p><strong>Status:</strong> <span id="status" class="status-badge"></span></p>
+                    <p><strong>Application Date:</strong> <span id="appDate"></span></p>
+                    <p id="rejectionReason" class="hidden"><strong>Reason:</strong> <span id="reason"></span></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>My Marks</h2>
+                <div id="marksSection">
+                    <table id="marksTable">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Marks</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marksBody">
+                            <!-- Marks will be loaded here -->
+                        </tbody>
+                    </table>
+                    <div class="total-section">
+                        <p><strong>Total:</strong> <span id="totalMarks"></span></p>
+                        <p><strong>Average:</strong> <span id="averageMarks"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="functions.js"></script>
+    <script>
+        // Load student data on page load
+        window.onload = function() {
+            loadStudentData();
+        };
+    </script>
+</body>
+</html>

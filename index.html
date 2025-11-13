@@ -4,9 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>School Management System - Home</title>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    
+    <div class="container">
+        <header>
+            <h1>Welcome to Tresor College</h1>
+            <p>School Management System</p>
+        </header>
+
+        <div class="login-section">
+            <h2>Select Your Role</h2>
+            <div class="role-buttons">
+                <button class="role-btn student-btn" onclick="showLoginForm('student')">
+                    <span class="icon">👨‍🎓</span>
+                    <span>Student Login</span>
+                </button>
+                <button class="role-btn admin-btn" onclick="showLoginForm('admin')">
+                    <span class="icon">👨‍💼</span>
+                    <span>Admin Login</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="loginForm" class="login-form hidden">
+            <h3 id="formTitle">Login</h3>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group" id="studentIdGroup">
+                    <label for="studentId">Student ID:</label>
+                    <input type="text" id="studentId" placeholder="Enter your Student ID" required>
+                    <small class="help-text">Example: STD1000</small>
+                </div>
+                <div class="form-group" id="adminCredentialsGroup" style="display: none;">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username">
+                </div>
+                <div class="form-group" id="adminPasswordGroup" style="display: none;">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Login</button>
+                    <button type="button" class="btn-secondary" onclick="hideLoginForm()">Cancel</button>
+                </div>
+            </form>
+            <div class="extra-links">
+                <a href="apply.html" id="applyLink">New Student? Apply Here</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="functions.js"></script>
 </body>
 </html>
