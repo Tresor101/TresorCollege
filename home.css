@@ -1505,15 +1505,39 @@ table tbody tr:hover {
     background: #f8f9fa;
 }
 
-.report-table tfoot {
-    background: #764ba2;
+.report-summary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 30px;
     color: white;
-    font-weight: bold;
 }
 
-.report-total td {
-    padding: 15px 12px;
-    font-size: 16px;
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.summary-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.summary-label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+.summary-value {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .report-footer {

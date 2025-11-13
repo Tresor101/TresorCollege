@@ -553,6 +553,51 @@ No build process required. Simply edit the HTML, CSS, or JS files and refresh yo
 - `addNews()` - Add news items
 - `loadNews()` - Display news on homepage
 
+## Future Roadmap
+
+### MySQL Database Integration (Planned)
+
+The application is planned to be migrated to a MySQL database backend hosted on Hostinger. This will include:
+
+**Database Structure:**
+- Replace localStorage with MySQL tables
+- Persistent data storage across devices
+- Better data integrity and relationships
+- Support for multiple concurrent users
+
+**Backend API:**
+- RESTful API using PHP/Node.js
+- Secure authentication with JWT tokens
+- Password encryption (bcrypt)
+- Session management
+- API endpoints for all CRUD operations
+
+**Hosting on Hostinger:**
+- MySQL database hosting
+- cPanel management
+- PHP/Node.js backend
+- SSL certificate for HTTPS
+- Regular database backups
+
+**Migration Benefits:**
+- Data persists permanently (not lost on browser clear)
+- Multi-user access from different devices
+- Better performance for large datasets
+- Advanced reporting with SQL queries
+- Real-time class average calculations
+- Student performance analytics
+
+## Current Limitations
+
+**This is a client-side application using localStorage:**
+- Data is stored locally in the browser
+- Data will be lost if browser data/cache is cleared
+- No multi-device synchronization
+- Single-user access per browser
+- Limited to browser storage capacity (~10MB)
+
+**For production use with multiple users, the MySQL database migration is essential.**
+
 ## License
 
 This project is open source and available for educational purposes.
@@ -567,4 +612,4 @@ Tresor101
 
 ---
 
-**Note**: This is a client-side application using localStorage. Data is stored locally in the browser and will be lost if browser data is cleared. For production use, consider implementing a backend server with a proper database.
+**Note**: This is currently a client-side demo application using localStorage. A MySQL database backend hosted on Hostinger is planned for production deployment to enable multi-user access, persistent data storage, and enterprise-level functionality.

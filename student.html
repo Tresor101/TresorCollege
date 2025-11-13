@@ -170,21 +170,31 @@
                         <table class="report-table">
                             <thead>
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Marks Obtained</th>
-                                    <th>Maximum Marks</th>
-                                    <th>Percentage</th>
+                                    <th>Subject Name</th>
+                                    <th>Student Marks</th>
+                                    <th>Max Marks</th>
+                                    <th>Class Average</th>
                                 </tr>
                             </thead>
                             <tbody id="reportMarksBody">
                             </tbody>
-                            <tfoot>
-                                <tr class="report-total">
-                                    <td colspan="3"><strong>Overall Average</strong></td>
-                                    <td><strong id="reportAverage"></strong></td>
-                                </tr>
-                            </tfoot>
                         </table>
+                    </div>
+                    <div class="report-summary">
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <span class="summary-label">Total Student Marks:</span>
+                                <span class="summary-value" id="reportTotalMarks"></span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Student Average Percentage:</span>
+                                <span class="summary-value" id="reportStudentAverage"></span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Class Average:</span>
+                                <span class="summary-value" id="reportClassAverage"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="report-footer">
                         <div class="signature-section">

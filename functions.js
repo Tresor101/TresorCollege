@@ -518,6 +518,27 @@ function generateReport() {
         if (teacher) classTeacher = teacher.fullName;
     }
     
+    // Calculate class averages for each subject
+    const classmates = students.filter(s => s.grade === student.grade);
+    const classAverages = {};
+    
+    studentMarks.forEach(mark => {
+        let totalMarks = 0;
+        let count = 0;
+        
+        classmates.forEach(classmate => {
+            const classmateMark = (marks[classmate.id] || []).find(m => m.subject === mark.subject);
+            if (classmateMark) {
+                const maxMarks = classmateMark.maxMarks || 100;
+                const percentage = (classmateMark.marks / maxMarks) * 100;
+                totalMarks += percentage;
+                count++;
+            }
+        });
+        
+        classAverages[mark.subject] = count > 0 ? (totalMarks / count).toFixed(1) : 'N/A';
+    });
+    
     // Populate report header
     document.getElementById('reportDate').textContent = 'Report Generated: ' + new Date().toLocaleDateString();
     document.getElementById('reportStudentId').textContent = student.id;
@@ -529,26 +550,57 @@ function generateReport() {
     const tbody = document.getElementById('reportMarksBody');
     tbody.innerHTML = '';
     
+    let totalStudentMarks = 0;
+    let totalMaxMarks = 0;
     let totalPercentage = 0;
     
     studentMarks.forEach(mark => {
         const maxMarks = mark.maxMarks || 100;
         const percentage = ((mark.marks / maxMarks) * 100).toFixed(1);
+        const classAvg = classAverages[mark.subject];
         totalPercentage += parseFloat(percentage);
+        totalStudentMarks += mark.marks;
+        totalMaxMarks += maxMarks;
+        
+        // Apply red color if percentage is less than 50%
+        const marksColor = percentage < 50 ? 'color: #e74c3c; font-weight: bold;' : '';
         
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${mark.subject}</td>
-            <td>${mark.marks}</td>
+            <td style="${marksColor}">${mark.marks}</td>
             <td>${maxMarks}</td>
-            <td>${percentage}%</td>
+            <td>${classAvg}%</td>
         `;
         tbody.appendChild(row);
     });
     
-    const average = (totalPercentage / studentMarks.length).toFixed(1);
+    const studentAverage = (totalPercentage / studentMarks.length).toFixed(1);
+    const studentAverageColor = studentAverage < 50 ? 'color: #e74c3c; font-weight: bold;' : 'color: #27ae60; font-weight: bold;';
     
-    document.getElementById('reportAverage').textContent = average + '%';
+    // Calculate overall class average
+    let overallClassTotal = 0;
+    let overallClassCount = 0;
+    
+    classmates.forEach(classmate => {
+        const classmateMark = marks[classmate.id] || [];
+        if (classmateMark.length > 0) {
+            let classmateTotal = 0;
+            classmateMark.forEach(m => {
+                const maxMarks = m.maxMarks || 100;
+                classmateTotal += (m.marks / maxMarks) * 100;
+            });
+            overallClassTotal += classmateTotal / classmateMark.length;
+            overallClassCount++;
+        }
+    });
+    
+    const overallClassAverage = overallClassCount > 0 ? (overallClassTotal / overallClassCount).toFixed(1) : 'N/A';
+    
+    // Populate summary
+    document.getElementById('reportTotalMarks').innerHTML = `<span style="${studentAverageColor}">${totalStudentMarks} / ${totalMaxMarks}</span>`;
+    document.getElementById('reportStudentAverage').innerHTML = `<span style="${studentAverageColor}">${studentAverage}%</span>`;
+    document.getElementById('reportClassAverage').textContent = overallClassAverage + '%';
     
     // Show modal
     document.getElementById('reportModal').classList.remove('hidden');
